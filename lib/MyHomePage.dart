@@ -1,9 +1,20 @@
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+import 'MySecondPage.dart';
 
-  String title;
+class MyHomePage extends StatefulWidget {
+  MyHomePage(
+      {Key key,
+      this.title,
+      this.counter,
+      this.decrementCounter,
+      this.incrementCounter})
+      : super(key: key);
+
+  final String title;
+  final int counter;
+  final ValueChanged<void> decrementCounter;
+  final ValueChanged<void> incrementCounter;
 
   @override
   State<StatefulWidget> createState() {
@@ -13,12 +24,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  void _onPressed() {
+    widget.incrementCounter(null);
   }
 
   @override
@@ -32,18 +39,31 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text("Hello World!"),
+            Text('You have pushed the button this many times:'),
             Text(
-              "$_counter",
+              widget.counter.toString(),
               style: Theme.of(context).textTheme.display1,
+            ),
+            RaisedButton(
+              child: Text('next screen'),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MySecondPage(
+                              widget.decrementCounter,
+                              title: 'My Second Page',
+                              counter: widget.counter,
+                            )));
+              },
             )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: _onPressed,
         tooltip: 'Increment',
-        child: Icon(Icons.add_circle),
+        child: Icon(Icons.add),
       ),
     );
   }
